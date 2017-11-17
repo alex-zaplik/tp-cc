@@ -16,6 +16,8 @@ public class Game extends ApplicationAdapter {
 	private BitmapFont testFont;
 	private GlyphLayout testLayout;
 
+	private float testX, testY;
+
 	private void fontsInit() {
 		FreeTypeFontGenerator ftg1 = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter ftfp1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -30,6 +32,8 @@ public class Game extends ApplicationAdapter {
 		testFont.setColor(1, 1, 1, 1);
 
 		testLayout = new GlyphLayout(testFont, "mójTest");
+		testX = (Gdx.graphics.getWidth() - testLayout.width) / 2;
+		testY = (Gdx.graphics.getHeight() + testLayout.height) / 2;
 	}
 
 	@Override
@@ -47,7 +51,7 @@ public class Game extends ApplicationAdapter {
 		batch.begin();
 
 		fpsFont.draw(batch, Float.toString(Gdx.graphics.getFramesPerSecond()), 5, Gdx.graphics.getHeight() - 5);
-		testFont.draw(batch, testLayout, (Gdx.graphics.getWidth() - testLayout.width) / 2, (Gdx.graphics.getHeight() + testLayout.height) / 2);
+		testFont.draw(batch, testLayout, testX, testY);
 
 		batch.end();
 	}
