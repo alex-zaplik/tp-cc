@@ -10,13 +10,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 public class Game extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	BitmapFont fpsFont;
-	BitmapFont testFont;
-	GlyphLayout testLayout;
+	private SpriteBatch batch;
+	private Texture img;
+	private BitmapFont fpsFont;
+	private BitmapFont testFont;
+	private GlyphLayout testLayout;
 
-	public void fontsInit() {
+	private void fontsInit() {
 		FreeTypeFontGenerator ftg1 = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter ftfp1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		ftfp1.size = 12;
