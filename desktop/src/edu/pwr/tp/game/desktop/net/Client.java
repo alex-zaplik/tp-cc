@@ -5,6 +5,7 @@ import edu.pwr.tp.game.desktop.message.builder.JSONMessageBuilder;
 import edu.pwr.tp.game.desktop.message.parser.IMessageParser;
 import edu.pwr.tp.game.desktop.message.parser.JSONMessageParser;
 import edu.pwr.tp.game.desktop.views.IView;
+import javafx.application.Platform;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,15 +60,18 @@ public class Client {
 	 * Thread used to wait for messages sent by the server
 	 */
 	private Thread inputListener = new Thread(() -> {
-		String input;
-
 		while (true) {
 			if (getIn() != null) {
 				try {
-					input = getIn().readLine();
+					final String input = getIn().readLine();
 
 					if (input != null)
-						view.handleInput(input);
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								view.handleInput(input);
+							}
+						});
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -100,13 +104,14 @@ public class Client {
 	 *
 	 * @param name  Name of the party that the users wants to join
 	 */
-	void joinParty(String name) {
-		getOut().println(
-				getBuilder()
-						.put("i_action", 1)
-						.put("s_name", name)
-						.get()
-		);
+	public void joinParty(String name) {
+		String msg = getBuilder()
+				.put("i_action", 1)
+				.put("s_name", name)
+				.get();
+
+		System.out.println(msg);
+		getOut().println(msg);
 	}
 
 	/**
@@ -115,7 +120,7 @@ public class Client {
 	 * @param name  Name of the party to be created
 	 * @param max   Maximum number of users connected to the new party
 	 */
-	void sendPartySettings(String name, int max) {
+	public void sendPartySettings(String name, int max) {
 		getOut().println(
 				getBuilder().put("i_action", 0)
 						.put("s_name", name)
@@ -129,7 +134,7 @@ public class Client {
 	 *
 	 * @param msg   The message to be sent
 	 */
-	void sendMessage(String msg) {
+	public void sendMessage(String msg) {
 		getOut().println(msg);
 	}
 
@@ -269,7 +274,7 @@ public class Client {
 	 *
 	 * @return  The parser used by the client
 	 */
-	private IMessageParser getParser() {
+	public IMessageParser getParser() {
 		return parser;
 	}
 
@@ -278,7 +283,7 @@ public class Client {
 	 *
 	 * @return  The builder used by the client
 	 */
-	private IMessageBuilder getBuilder() {
+	public IMessageBuilder getBuilder() {
 		return builder;
 	}
 
