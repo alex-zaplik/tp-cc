@@ -1,12 +1,10 @@
 package edu.pwr.tp.game.desktop;
 
-import edu.pwr.tp.game.desktop.views.fx.HelpView;
-import edu.pwr.tp.game.desktop.views.fx.LoginView;
-import edu.pwr.tp.game.desktop.views.fx.MainView;
-import edu.pwr.tp.game.desktop.views.fx.PartyView;
+import edu.pwr.tp.game.desktop.views.fx.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class DesktopLauncher extends Application {
@@ -30,7 +28,8 @@ public class DesktopLauncher extends Application {
 		partyView = new PartyView(primaryStage);
 
 		primaryStage.setTitle("mojeChineseCheckers");
-		primaryStage.setScene(new Scene(DesktopLauncher.mainView));
+		//primaryStage.setScene(new Scene(DesktopLauncher.mainView));
+		primaryStage.setScene(new Scene(new GameView(primaryStage, Color.BLACK))); //TODO: testing only. remove the line and uncomment line above
 		primaryStage.show();
 	}
 
