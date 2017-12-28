@@ -1,9 +1,6 @@
 package edu.pwr.tp.game.desktop;
 
-import edu.pwr.tp.game.desktop.views.fx.HelpView;
-import edu.pwr.tp.game.desktop.views.fx.LoginView;
-import edu.pwr.tp.game.desktop.views.fx.MainView;
-import edu.pwr.tp.game.desktop.views.fx.PartyView;
+import edu.pwr.tp.game.desktop.views.fx.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -11,9 +8,12 @@ import javafx.stage.Stage;
 
 public class DesktopLauncher extends Application {
 
+	// TODO: Reconnecting
+
 	public static MainView mainView;
 	public static HelpView helpView;
 	public static LoginView loginView;
+	public static PartyListView partyListView;
 	public static PartyView partyView;
 
 	public static void changeRoot(Stage stage, Pane root) {
@@ -27,6 +27,7 @@ public class DesktopLauncher extends Application {
 		mainView = new MainView(primaryStage);
 		helpView = new HelpView(primaryStage);
 		loginView = new LoginView(primaryStage);
+		partyListView = new PartyListView(primaryStage);
 		partyView = new PartyView(primaryStage);
 
 		primaryStage.setTitle("mojeChineseCheckers");
