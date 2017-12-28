@@ -2,6 +2,7 @@ package edu.pwr.tp.game.desktop.views.fx;
 
 import edu.pwr.tp.game.desktop.views.IView;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -22,6 +23,15 @@ public abstract class FXView extends GridPane implements IView {
 		setBackground(new Background(new BackgroundFill(Color.rgb(0, 0, 0), CornerRadii.EMPTY, Insets.EMPTY)));
 
 		createWindow();
+	}
+
+	void displayErrorMessage(String msg) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.setHeaderText("Something went wrong");
+		alert.setContentText(msg);
+
+		alert.showAndWait();
 	}
 
 	protected abstract void createWindow();

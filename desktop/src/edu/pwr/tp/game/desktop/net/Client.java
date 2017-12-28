@@ -51,6 +51,9 @@ public class Client {
 	 */
 	public IMessageBuilder builder;
 
+	private boolean isJoining = false;
+	private volatile boolean listening = true;
+
 	/**
 	 * Reference to the current view
 	 */
@@ -59,44 +62,80 @@ public class Client {
 	/**
 	 * Thread used to wait for messages sent by the server
 	 */
-	private Thread inputListener = new Thread(() -> {
-		while (true) {
+	private Runnable inputListener = () -> {
+		while (isListening()) {
 			if (getIn() != null) {
 				try {
-					final String input = getIn().readLine();
+					if (getIn().ready()) {
+						final String input = getIn().readLine();
 
-					if (input != null)
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								view.handleInput(input);
-							}
-						});
+						if (input != null)
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									view.handleInput(input);
+								}
+							});
+					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					// TODO: Disconnect
+					System.err.println("Server closed");
+					return;
 				}
 			}
 		}
-	});
+	};
+	private Thread inputListenerThread = null;
+
+	private boolean isListening() {
+		return listening;
+	}
+
+	public void stopListening() {
+		listening = false;
+
+		if (inputListenerThread != null) {
+			try {
+				inputListenerThread.join();
+				inputListenerThread = null;
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	/**
 	 * Starts the listening thread
 	 */
 	public void startListening() {
-		inputListener.setDaemon(true);
-		inputListener.start();
+		listening = true;
+		inputListenerThread = new Thread(inputListener);
+		inputListenerThread.setDaemon(true);
+		inputListenerThread.start();
 	}
 
-	void startGame() {
-		getOut().println(builder.put("s_start", "StartGame").get());
+	public void startGame() {
+		sendMessage(builder.put("s_start", "StartGame").get());
 	}
 
-	void sendMove(int fx, int fy, int tx, int ty) {
-		getOut().println(builder.put("i_action", 0).put("i_fx", fx).put("i_fy", fy).put("i_tx", tx).put("i_ty", ty).get());
+	public void sendDone(boolean done) {
+		sendMessage(builder.put("b_done", done).get());
 	}
 
-	void skipMove() {
-		getOut().println(builder.put("i_action", 1).get());
+	public void sendMove(int fx, int fy, int tx, int ty) {
+		sendMessage(builder.put("i_action", 0).put("i_fx", fx).put("i_fy", fy).put("i_tx", tx).put("i_ty", ty).get());
+	}
+
+	public void skipMove() {
+		sendMessage(builder.put("i_action", 1).get());
+	}
+
+	public void stopJoining() {
+		isJoining = false;
+	}
+
+	public boolean isJoining() {
+		return isJoining;
 	}
 
 	/**
@@ -105,13 +144,16 @@ public class Client {
 	 * @param name  Name of the party that the users wants to join
 	 */
 	public void joinParty(String name) {
+		System.out.println("Joining " + name);
+
+		isJoining = true;
+
 		String msg = getBuilder()
 				.put("i_action", 1)
 				.put("s_name", name)
 				.get();
 
-		System.out.println(msg);
-		getOut().println(msg);
+		sendMessage(msg);
 	}
 
 	/**
@@ -121,7 +163,11 @@ public class Client {
 	 * @param max   Maximum number of users connected to the new party
 	 */
 	public void sendPartySettings(String name, int max) {
-		getOut().println(
+		System.out.println("Joining " + name);
+
+		isJoining = true;
+
+		sendMessage(
 				getBuilder().put("i_action", 0)
 						.put("s_name", name)
 						.put("i_max", max)
@@ -134,7 +180,7 @@ public class Client {
 	 *
 	 * @param msg   The message to be sent
 	 */
-	public void sendMessage(String msg) {
+	private void sendMessage(String msg) {
 		getOut().println(msg);
 	}
 
@@ -290,7 +336,9 @@ public class Client {
 	/**
 	 * Disconnects the user from the server
 	 */
-	void disconnect() {
+	public void disconnect() {
+		stopListening();
+
 		try {
 			out.close();
 			in.close();
