@@ -4,6 +4,7 @@ import edu.pwr.tp.game.desktop.DesktopLauncher;
 import edu.pwr.tp.game.desktop.net.Client;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import org.lwjgl.opencl.CL;
 
 import java.util.Map;
 
@@ -30,6 +31,9 @@ public class PartyView extends FXView {
 			GameView gv = new GameView(stage, (int) response.get("i_pcount"), (int) response.get("i_pindex"));
 			Client.getInstance().changeView(gv);
 			DesktopLauncher.changeRoot(stage, gv);
+		} else if (response.containsKey("s_disc")) {
+			Client.getInstance().disconnect();
+			DesktopLauncher.changeRoot(stage, DesktopLauncher.loginView);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package edu.pwr.tp.game.desktop.views.fx;
 
+import edu.pwr.tp.game.desktop.DesktopLauncher;
 import edu.pwr.tp.game.desktop.net.Client;
 import edu.pwr.tp.game.desktop.views.IView;
 import edu.pwr.tp.game.desktop.views.fx.game_view_elements.GUIBoard;
@@ -63,6 +64,9 @@ public class GameView extends GridPane implements IView {
             }
         } else if (response.containsKey("i_action")) {
             board.movePawn((int) response.get("i_fx"), (int) response.get("i_fy"), (int) response.get("i_tx"), (int) response.get("i_ty"));
+        } else if (response.containsKey("s_disc")) {
+            Client.getInstance().disconnect();
+            DesktopLauncher.changeRoot(stage, DesktopLauncher.loginView);
         }
     }
 }
