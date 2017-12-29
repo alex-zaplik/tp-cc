@@ -14,8 +14,6 @@ import javafx.stage.Stage;
 
 public class GameView extends GridPane implements IView {
 
-    private Paint playerColor;
-
     private Stage stage;
 
     private int playerCount;
@@ -31,14 +29,13 @@ public class GameView extends GridPane implements IView {
 
         this.playerCount = playerCount;
         this.playerIndex = playerIndex;
-        this.playerColor = playerColor;
 
         createWindow();
     }
 
     protected void createWindow() {
         // TODO: Get the index instead of a color
-        GUIBoard guiBoard = new GUIBoard(playerCount, Color.grayRgb(100));
+        GUIBoard guiBoard = new GUIBoard(playerCount, playerIndex);
         add(guiBoard,0,0);
 
         Client.getInstance().sendDone(true);
@@ -47,5 +44,7 @@ public class GameView extends GridPane implements IView {
     @Override
     public void handleInput(String msg) {
         System.out.println("GameView: " + msg);
+
+        // TODO: Start move when got "s_move"
     }
 }
