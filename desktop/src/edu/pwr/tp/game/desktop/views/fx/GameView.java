@@ -12,12 +12,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
+import java.util.Map;
+
 public class GameView extends GridPane implements IView {
 
     private Stage stage;
 
     private int playerCount;
     private int playerIndex;
+
+    private boolean isMoving = false;
+    private GUIBoard board;
 
     public GameView(Stage stage, int playerCount, int playerIndex) {
         this.stage = stage;
@@ -35,8 +40,10 @@ public class GameView extends GridPane implements IView {
 
     protected void createWindow() {
         // TODO: Get the index instead of a color
-        GUIBoard guiBoard = new GUIBoard(playerCount, playerIndex);
-        add(guiBoard,0,0);
+        board = new GUIBoard(playerCount, playerIndex);
+        if (isMoving) board.startPlayerTurn();
+
+        add(board,0,0);
 
         Client.getInstance().sendDone(true);
     }
@@ -45,6 +52,17 @@ public class GameView extends GridPane implements IView {
     public void handleInput(String msg) {
         System.out.println("GameView: " + msg);
 
-        // TODO: Start move when got "s_move"
+        Map<String, Object> response = Client.getInstance().parser.parse(msg);
+        if (response.containsKey("s_move")) {
+            // TODO: Handle jumps and skips
+
+            if (board != null) {
+                board.startPlayerTurn();
+            } else {
+                isMoving = true;
+            }
+        } else if (response.containsKey("i_action")) {
+            board.movePawn((int) response.get("i_fx"), (int) response.get("i_fy"), (int) response.get("i_tx"), (int) response.get("i_ty"));
+        }
     }
 }
