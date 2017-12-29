@@ -33,7 +33,6 @@ public class DesktopLauncher extends Application {
 
 		primaryStage.setTitle("mojeChineseCheckers");
 		primaryStage.setScene(new Scene(DesktopLauncher.mainView));
-		// primaryStage.setScene(new Scene(new GameView(primaryStage, Color.BLACK)));
 		primaryStage.show();
 	}
 
