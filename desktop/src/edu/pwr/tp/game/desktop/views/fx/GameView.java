@@ -6,12 +6,13 @@ import javafx.stage.Stage;
 
 public class GameView extends FXView {
 
-    private Paint playerColor;
+    private int playerIndex;
 
     @Override
     protected void createWindow() {
-        GUIBoard guiBoard = new GUIBoard(6, playerColor); //TODO: 6 is for testing only. change that later
-        add(guiBoard,0,0);
+        GUIBoard guiBoard = new GUIBoard(6, playerIndex); //TODO: 6 is for testing only. change that later
+        add(guiBoard,0,0); //TODO: found BUG: createWindow starts earlier than constructor initializates playerIndex!!
+        guiBoard.startPlayerTurn();
     }
 
     @Override
@@ -19,8 +20,9 @@ public class GameView extends FXView {
 
     }
 
-    public GameView(Stage stage, Paint playerColor){
+    public GameView(Stage stage, int playerIndex){
         super(stage);
+        this.playerIndex=playerIndex;
     }
 
 }
