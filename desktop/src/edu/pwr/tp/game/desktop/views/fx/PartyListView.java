@@ -47,7 +47,7 @@ public class PartyListView extends FXView {
 		Platform.runLater(() -> {
 			DesktopLauncher.partyView.resolvePending(pending);
 			Client.getInstance().changeView(DesktopLauncher.partyView);
-				DesktopLauncher.changeRoot(stage, DesktopLauncher.partyView);
+			DesktopLauncher.changeRoot(stage, DesktopLauncher.partyView);
 		});
 	};
 

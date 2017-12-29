@@ -1,8 +1,11 @@
 package edu.pwr.tp.game.desktop.views.fx;
 
+import edu.pwr.tp.game.desktop.DesktopLauncher;
 import edu.pwr.tp.game.desktop.net.Client;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+
+import java.util.Map;
 
 public class PartyView extends FXView {
 
@@ -14,17 +17,19 @@ public class PartyView extends FXView {
 	protected void createWindow() {
 		Button start = new Button("Start");
 		start.setMinWidth(200);
-		start.setOnAction(e -> {
-			Client.getInstance().startGame();
-
-			// TODO: Set up the actual game and do this after finishing:
-			// 		 Client.getInstance().sendDone(true);
-		});
+		start.setOnAction(e -> Client.getInstance().startGame());
 		add(start, 0, 0);
 	}
 
 	@Override
 	public void handleInput(String msg) {
-		System.out.println(msg);
+		Map<String, Object> response = Client.getInstance().parser.parse(msg);
+		if (response.containsKey("s_game")) {
+			// TODO: Handle different games here
+
+			GameView gv = new GameView(stage, (int) response.get("i_pcount"), (int) response.get("i_pindex"));
+			Client.getInstance().changeView(gv);
+			DesktopLauncher.changeRoot(stage, gv);
+		}
 	}
 }
