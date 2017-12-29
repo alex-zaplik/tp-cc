@@ -32,8 +32,7 @@ public class DesktopLauncher extends Application {
 		partyView = new PartyView(primaryStage);
 
 		primaryStage.setTitle("mojeChineseCheckers");
-		//primaryStage.setScene(new Scene(DesktopLauncher.mainView));
-		primaryStage.setScene(new Scene(new GameView(primaryStage, 3))); //TODO: testing only. remove the line and uncomment line above
+		primaryStage.setScene(new Scene(DesktopLauncher.mainView));
 		primaryStage.show();
 	}
 
