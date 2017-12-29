@@ -9,9 +9,12 @@ import javafx.stage.Stage;
 
 public class DesktopLauncher extends Application {
 
+	// TODO: Reconnecting
+
 	public static MainView mainView;
 	public static HelpView helpView;
 	public static LoginView loginView;
+	public static PartyListView partyListView;
 	public static PartyView partyView;
 
 	public static void changeRoot(Stage stage, Pane root) {
@@ -25,6 +28,7 @@ public class DesktopLauncher extends Application {
 		mainView = new MainView(primaryStage);
 		helpView = new HelpView(primaryStage);
 		loginView = new LoginView(primaryStage);
+		partyListView = new PartyListView(primaryStage);
 		partyView = new PartyView(primaryStage);
 
 		primaryStage.setTitle("mojeChineseCheckers");

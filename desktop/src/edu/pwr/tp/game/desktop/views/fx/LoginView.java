@@ -61,10 +61,11 @@ public class LoginView extends FXView {
 
 				if (Client.getInstance().initConnection(this, tAddress.getText(), port)) {
 					Client.getInstance().startListening();
-					Client.getInstance().changeView(DesktopLauncher.partyView);
 
-					DesktopLauncher.partyView.resolvePending(pendingMsg);
-					DesktopLauncher.changeRoot(stage, DesktopLauncher.partyView);
+					DesktopLauncher.partyListView.resolvePending(pendingMsg);
+					Client.getInstance().changeView(DesktopLauncher.partyListView);
+
+					DesktopLauncher.changeRoot(stage, DesktopLauncher.partyListView);
 
 					return;
 				}
@@ -83,19 +84,8 @@ public class LoginView extends FXView {
 		add(exit, 1, 4);
 	}
 
-	private void displayErrorMessage(String msg) {
-		Alert alert = new Alert(Alert.AlertType.ERROR);
-		alert.setTitle("Error");
-		alert.setHeaderText("Something went wrong");
-		alert.setContentText(msg);
-
-		alert.showAndWait();
-	}
-
 	@Override
 	public void handleInput(String msg) {
-		System.out.println("Login: " + msg);
-
 		pendingMsg.add(msg);
 	}
 }
