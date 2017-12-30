@@ -12,6 +12,11 @@ public class GUIPawn extends Circle {
     private int colorID;
     private int x;
     private int y;
+    private boolean movable = false;
+
+    public boolean isMovable() {
+        return movable;
+    }
 
     public int getX() {
         return x;
@@ -36,7 +41,7 @@ public class GUIPawn extends Circle {
                         break;
                     }
                 } else {
-                    if (field.getX()==getX() && field.getY()==getY()){
+                    if (field.getX() == getX() && field.getY() == getY()) {
                         setCenterX(field.getCenterX());
                         setCenterY(field.getCenterY());
                         //TODO: add MessageBox with message: "move is invalid. try again later;
@@ -47,42 +52,6 @@ public class GUIPawn extends Circle {
         }
     }
 
-    private final EventHandler<MouseEvent> pawnMover = mouseEvent -> {
-        double previousCenterX = getCenterX();
-        double previousCenterY = getCenterY();
-        double startingMouseX = mouseEvent.getSceneX();
-        double startingMouseY = mouseEvent.getSceneY();
-        EventHandler<MouseEvent> mover = mouseEvent1 -> {
-            double deltaX = mouseEvent1.getSceneX() - startingMouseX;
-            double deltaY = mouseEvent1.getSceneY() - startingMouseY;
-            setCenterX(previousCenterX + deltaX);
-            setCenterY(previousCenterY + deltaY);
-        };
-        setOnMouseDragged(mover);
-        setOnMouseReleased(mouseDragEvent -> {
-            removeEventHandler(MouseEvent.MOUSE_DRAGGED, mover);
-            boolean found = false;
-            for (int i = 0; i < board.getChildren().size(); i++) {
-                if (!(board.getChildren().get(i) instanceof GUIField)) continue;
-                GUIField field = (GUIField) board.getChildren().get(i);
-                double distance = Math.sqrt(
-                        (field.getCenterX() - getCenterX()) * (field.getCenterX() - getCenterX()) +
-                                (field.getCenterY() - getCenterY()) * (field.getCenterY() - getCenterY()));
-                if (distance < field.getRadius()) {
-                    found = true;
-                    board.sendMoveToServer(getX(), getY(), field.getX(), field.getY());
-                    board.setLastPawnMovedByMe(this);
-                    setCenterY(field.getCenterY());
-                    setCenterX(field.getCenterX());
-                    break;
-                }
-            }
-            if (!found) {
-                setCenterX(previousCenterX);
-                setCenterY(previousCenterY);
-            }
-        });
-    };
 
     public void setColorID(int colorID) {
         this.colorID = colorID;
@@ -93,11 +62,11 @@ public class GUIPawn extends Circle {
     }
 
     public void enableMove() {
-        setOnMousePressed(pawnMover);
+        movable=true;
     }
 
     public void disableMove() {
-        removeEventHandler(MouseEvent.MOUSE_PRESSED, pawnMover);
+        movable=false;
     }
 
     GUIPawn(GUIBoard board, Paint fill) {
@@ -105,7 +74,7 @@ public class GUIPawn extends Circle {
         super(8, fill);
         this.board = board;
         setOnMouseEntered((MouseEvent mouseEvent) -> {
-            if (this.colorID == board.getPlayerIndex()) {
+            if (isMovable()) {
                 //on mouse enter effects:
                 setRadius(getRadius() + 1);
                 setEffect(new DropShadow());
@@ -113,11 +82,53 @@ public class GUIPawn extends Circle {
         });
         //removing changes for the object
         setOnMouseExited(mouseEvent1 -> {
-            if (this.colorID == board.getPlayerIndex()) {
-                setRadius(getRadius() - 1);
+            if (getColorID()==board.getPlayerIndex()) {
+                setRadius(8);
                 setEffect(null);
             }
         });
+
+        EventHandler<MouseEvent> pawnMover = mouseEvent -> {
+            double previousCenterX = getCenterX();
+            double previousCenterY = getCenterY();
+            double startingMouseX = mouseEvent.getSceneX();
+            double startingMouseY = mouseEvent.getSceneY();
+            EventHandler<MouseEvent> mover = mouseEvent1 -> {
+                if (isMovable()) {
+                    double deltaX = mouseEvent1.getSceneX() - startingMouseX;
+                    double deltaY = mouseEvent1.getSceneY() - startingMouseY;
+                    setCenterX(previousCenterX + deltaX);
+                    setCenterY(previousCenterY + deltaY);
+                }
+            };
+            setOnMouseDragged(mover);
+            setOnMouseReleased(mouseDragEvent -> {
+                if (isMovable()) {
+                    boolean found = false;
+                    for (int i = 0; i < board.getChildren().size(); i++) {
+                        if (!(board.getChildren().get(i) instanceof GUIField)) continue;
+                        GUIField field = (GUIField) board.getChildren().get(i);
+                        double distance = Math.sqrt(
+                                (field.getCenterX() - getCenterX()) * (field.getCenterX() - getCenterX()) +
+                                        (field.getCenterY() - getCenterY()) * (field.getCenterY() - getCenterY()));
+                        if (distance < field.getRadius()) {
+                            found = true;
+                            board.sendMoveToServer(getX(), getY(), field.getX(), field.getY());
+                            board.setLastPawnMovedByMe(this);
+                            setCenterY(field.getCenterY());
+                            setCenterX(field.getCenterX());
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        setCenterX(previousCenterX);
+                        setCenterY(previousCenterY);
+                    }
+                }
+            });
+        };
+
+        setOnMousePressed(pawnMover);
 
         board.getChildren().add(this);
     }

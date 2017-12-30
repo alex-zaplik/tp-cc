@@ -58,6 +58,7 @@ public class GUIBoard extends Pane {
 
     public void sendMoveToServer(int fromX, int fromY, int toX, int toY){
         Client.getInstance().sendMove(fromX,fromY,toX,toY);
+        startEnemyTurn();
     }
 
     public GUIBoard(int players, int playerIndex){
