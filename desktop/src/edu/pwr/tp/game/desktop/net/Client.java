@@ -162,7 +162,7 @@ public class Client {
 	 * @param name  Name of the party to be created
 	 * @param max   Maximum number of users connected to the new party
 	 */
-	public void sendPartySettings(String name, int max) {
+	public void sendPartySettings(String name, int bots, int max) {
 		System.out.println("Joining " + name);
 
 		isJoining = true;
@@ -170,6 +170,7 @@ public class Client {
 		sendMessage(
 				getBuilder().put("i_action", 0)
 						.put("s_name", name)
+						.put("i_bots", bots)
 						.put("i_max", max)
 						.get()
 		);

@@ -74,13 +74,34 @@ public class PartyListView extends FXView {
 		Button create = new Button("Create");
 		create.setOnAction(event -> {
 			if (!Client.getInstance().isJoining()) {
-				TextInputDialog dialog = new TextInputDialog("name");
-				dialog.setTitle("Create a party");
-				dialog.setHeaderText("Choose a name for your party");
-				dialog.setContentText("Name:");
+				TextInputDialog nameDialog = new TextInputDialog("name");
+				nameDialog.setTitle("Party name");
+				nameDialog.setHeaderText("Choose a name for your party");
+				nameDialog.setContentText("Name:");
 
-				Optional<String> result = dialog.showAndWait();
-				result.ifPresent(name -> Client.getInstance().sendPartySettings(name, 6));
+				Optional<String> nameResult = nameDialog.showAndWait();
+
+				TextInputDialog dialog = new TextInputDialog("0");
+				dialog.setTitle("Bot count");
+				dialog.setHeaderText("Choose how many bots do you want");
+				dialog.setContentText("Count:");
+
+				Optional<String> botsResult = dialog.showAndWait();
+
+				if (nameResult.isPresent() && botsResult.isPresent()) {
+					try {
+						int bots = Integer.parseInt(botsResult.get());
+						if (bots > 5 || bots < 0) throw new NumberFormatException();
+
+						Client.getInstance().sendPartySettings(nameResult.get(), bots, 6);
+					} catch (NumberFormatException e) {
+						displayErrorMessage("Invalid bot count, must be a number between 0 and 5");
+						return;
+					}
+				} else {
+					displayErrorMessage("Invalid data given");
+					return;
+				}
 
 				new Thread(waitForServer).start();
 			}
