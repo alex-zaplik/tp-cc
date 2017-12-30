@@ -10,7 +10,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import java.util.Map;
@@ -62,6 +61,9 @@ public class GameView extends GridPane implements IView {
             } else {
                 isMoving = true;
             }
+        } else if (response.containsKey("b_valid")) {
+                board.getLastPawnMovedByMe().confirmMove((boolean) response.get("b_valid"));
+                if((boolean) response.get("b_valid")) board.startEnemyTurn();
         } else if (response.containsKey("i_action")) {
             board.movePawn((int) response.get("i_fx"), (int) response.get("i_fy"), (int) response.get("i_tx"), (int) response.get("i_ty"));
         } else if (response.containsKey("s_disc")) {

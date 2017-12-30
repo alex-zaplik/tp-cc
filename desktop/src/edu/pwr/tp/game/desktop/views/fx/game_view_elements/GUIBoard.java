@@ -1,23 +1,28 @@
 package edu.pwr.tp.game.desktop.views.fx.game_view_elements;
 
 import edu.pwr.tp.game.desktop.net.Client;
-import javafx.collections.ObservableArray;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-
-import java.util.ArrayList;
 
 public class GUIBoard extends Pane {
 
     private int playerIndex;
 
+    private GUIPawn lastPawnMovedByMe;
+
     private int lastMove[];
 
     public int getPlayerIndex() {
         return playerIndex;
+    }
+
+    public GUIPawn getLastPawnMovedByMe() {
+        return lastPawnMovedByMe;
+    }
+
+    public void setLastPawnMovedByMe(GUIPawn lastPawnMovedByMe) {
+        this.lastPawnMovedByMe = lastPawnMovedByMe;
     }
 
     public void startPlayerTurn(){
@@ -58,10 +63,6 @@ public class GUIBoard extends Pane {
         lastMove[1]=fromY;
         lastMove[2]=toX;
         lastMove[3]=toY;
-    }
-
-    public void undoLastMove(){
-        movePawn(lastMove[2],lastMove[3],lastMove[0],lastMove[1]);
     }
 
     public GUIBoard(int players, int playerIndex){
