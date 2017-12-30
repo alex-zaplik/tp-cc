@@ -9,8 +9,6 @@ import javafx.stage.Stage;
 
 public class DesktopLauncher extends Application {
 
-	// TODO: Reconnecting
-
 	public static MainView mainView;
 	public static HelpView helpView;
 	public static LoginView loginView;

@@ -16,10 +16,10 @@ public class GUIField extends Circle {
     }
 
     GUIField(int x, int y) {
-        super(10, Color.rgb(0xff,0xff,0xff)); //TODO: change Paint of the Field to more pretty one
+        super(10, Color.rgb(194, 200, 163));
         this.x=x;
         this.y=y;
-        this.setStroke(Color.rgb(0,0,0)); //TODO: change color of Stroke, delete this line or delete todo
+        this.setStroke(Color.rgb(28, 14, 30));
         this.setCenterY(y*20+10); //+10 to not start from 0
         this.setCenterX(x*20+10*y+10-6*20); //this will transform generated quadratic star to good star and move it to proper place
     }

@@ -1,11 +1,13 @@
 package edu.pwr.tp.game.desktop.net;
 
+import edu.pwr.tp.game.desktop.DesktopLauncher;
 import edu.pwr.tp.game.desktop.message.builder.IMessageBuilder;
 import edu.pwr.tp.game.desktop.message.builder.JSONMessageBuilder;
 import edu.pwr.tp.game.desktop.message.parser.IMessageParser;
 import edu.pwr.tp.game.desktop.message.parser.JSONMessageParser;
 import edu.pwr.tp.game.desktop.views.IView;
 import javafx.application.Platform;
+import org.lwjgl.opencl.CL;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,7 +43,6 @@ public class Client {
 	 */
 	private BufferedReader in = null;
 
-	// TODO: public is bad
 	/**
 	 * Used to parse received messages
 	 */
@@ -78,8 +79,9 @@ public class Client {
 							});
 					}
 				} catch (IOException e) {
-					// TODO: Disconnect
 					System.err.println("Server closed");
+					Client.getInstance().disconnect();
+					// TODO: Change view to loginView
 					return;
 				}
 			}

@@ -188,9 +188,9 @@ public class PartyListView extends FXView {
 				pending.add(msg);
 			}
 		} catch (NullPointerException e) {
-			// TODO: Disconnect
 			System.err.println("Server closed");
 			Client.getInstance().disconnect();
+			DesktopLauncher.changeRoot(stage, DesktopLauncher.loginView);
 		}
 	}
 }

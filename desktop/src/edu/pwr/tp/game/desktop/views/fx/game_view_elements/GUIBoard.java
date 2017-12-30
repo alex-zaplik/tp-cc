@@ -11,6 +11,14 @@ public class GUIBoard extends Pane {
 
     private GUIPawn lastPawnMovedByMe;
 
+    private Color[] colors = {
+            Color.rgb(50, 63, 255),
+            Color.rgb(71, 255, 76),
+            Color.rgb(255, 77, 59),
+            Color.rgb(206, 52, 255),
+            Color.rgb(255, 173, 60),
+            Color.rgb(143, 74, 44)
+    };
 
     public int getPlayerIndex() {
         return playerIndex;
@@ -76,7 +84,7 @@ public class GUIBoard extends Pane {
             for(int x=4; x<=7; x++)
                 for(int y=13; y<=16; y++){
                     if(x+y<=20){
-                        GUIPawn pawn = new GUIPawn(this,Color.rgb(0x00,0x00,0xff)); //TODO: color
+                        GUIPawn pawn = new GUIPawn(this, colors[0]);
                         pawn.setCenterX(x*20+10*y+10-6*20);
                         pawn.setCenterY(y*20+10);
                         pawn.setXY(x,y);
@@ -88,7 +96,7 @@ public class GUIBoard extends Pane {
             for(int x=0; x<=3; x++)
                 for (int y=9; y<=12; y++){
                     if(x+y>=12){
-                        GUIPawn pawn = new GUIPawn(this,Color.rgb(0x00,0xff,0x00)); //TODO: color
+                        GUIPawn pawn = new GUIPawn(this, colors[1]);
                         pawn.setCenterX(x*20+10*y+10-6*20);
                         pawn.setCenterY(y*20+10);
                         pawn.setXY(x,y);
@@ -101,7 +109,7 @@ public class GUIBoard extends Pane {
             for(int x=4; x<=7; x++)
                 for (int y=4; y<=7; y++){
                     if(x+y<=11){
-                        GUIPawn pawn = new GUIPawn(this,Color.rgb(0xff,0x00,0x00)); //TODO: color
+                        GUIPawn pawn = new GUIPawn(this, colors[2]);
                         pawn.setCenterX(x*20+10*y+10-6*20);
                         pawn.setCenterY(y*20+10);
                         pawn.setXY(x,y);
@@ -114,7 +122,7 @@ public class GUIBoard extends Pane {
             for(int x=9; x<=12; x++)
                 for(int y=0; y<=3; y++)
                     if(x+y>=12){
-                        GUIPawn pawn = new GUIPawn(this,Color.rgb(0xff,0x00,0xff)); //TODO: color
+                        GUIPawn pawn = new GUIPawn(this, colors[3]);
                         pawn.setCenterX(x*20+10*y+10-6*20);
                         pawn.setCenterY(y*20+10);
                         pawn.setXY(x,y);
@@ -126,7 +134,7 @@ public class GUIBoard extends Pane {
             for(int x=13; x<=16; x++)
                 for(int y=4; y<=7; y++){
                     if(x+y<=20){
-                        GUIPawn pawn = new GUIPawn(this,Color.rgb(0x5f,0x5f,0x50)); //TODO: color
+                        GUIPawn pawn = new GUIPawn(this, colors[4]);
                         pawn.setCenterX(x*20+10*y+10-6*20);
                         pawn.setCenterY(y*20+10);
                         pawn.setXY(x,y);
@@ -139,7 +147,7 @@ public class GUIBoard extends Pane {
             for(int x=9; x<=12; x++)
                 for(int y=9; y<=12; y++){
                     if(x+y>=21){
-                        GUIPawn pawn = new GUIPawn(this,Color.rgb(0x00,0x00,0x00)); //TODO: color
+                        GUIPawn pawn = new GUIPawn(this, colors[5]);
                         pawn.setCenterX(x*20+10*y+10-6*20);
                         pawn.setCenterY(y*20+10);
                         pawn.setXY(x,y);

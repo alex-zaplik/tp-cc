@@ -5,6 +5,7 @@ import edu.pwr.tp.game.desktop.net.Client;
 import edu.pwr.tp.game.desktop.views.IView;
 import edu.pwr.tp.game.desktop.views.fx.game_view_elements.GUIBoard;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -38,14 +39,22 @@ public class GameView extends GridPane implements IView {
         createWindow();
     }
 
-    protected void createWindow() {
-        // TODO: Get the index instead of a color
+    private void createWindow() {
         board = new GUIBoard(playerCount, playerIndex);
         if (isMoving) board.startPlayerTurn();
 
         add(board,0,0);
 
         Client.getInstance().sendDone(true);
+    }
+
+    private void displayGameOverMessage(String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game over");
+        alert.setHeaderText("Game over");
+        alert.setContentText(msg);
+
+        alert.showAndWait();
     }
 
     @Override
@@ -69,6 +78,8 @@ public class GameView extends GridPane implements IView {
         } else if (response.containsKey("s_disc")) {
             Client.getInstance().disconnect();
             DesktopLauncher.changeRoot(stage, DesktopLauncher.loginView);
+        } else if (response.containsKey("b_won")) {
+            displayGameOverMessage(((boolean) response.get("b_won")) ? "You won!" : "You lost :<");
         }
     }
 }

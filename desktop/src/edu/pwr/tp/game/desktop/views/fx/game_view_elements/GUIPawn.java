@@ -1,6 +1,7 @@
 package edu.pwr.tp.game.desktop.views.fx.game_view_elements;
 
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
@@ -44,7 +45,7 @@ public class GUIPawn extends Circle {
                     if (field.getX() == getX() && field.getY() == getY()) {
                         setCenterX(field.getCenterX());
                         setCenterY(field.getCenterY());
-                        //TODO: add MessageBox with message: "move is invalid. try again later;
+                        displayInvalidMove();
                         break;
                     }
                 }
@@ -52,6 +53,14 @@ public class GUIPawn extends Circle {
         }
     }
 
+    private void displayInvalidMove() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Oops");
+        alert.setHeaderText("Invalid move");
+        alert.setContentText("Your move was invalid. Please try again");
+
+        alert.showAndWait();
+    }
 
     public void setColorID(int colorID) {
         this.colorID = colorID;
