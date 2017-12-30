@@ -11,7 +11,6 @@ public class GUIBoard extends Pane {
 
     private GUIPawn lastPawnMovedByMe;
 
-    private int lastMove[];
 
     public int getPlayerIndex() {
         return playerIndex;
@@ -59,15 +58,10 @@ public class GUIBoard extends Pane {
 
     public void sendMoveToServer(int fromX, int fromY, int toX, int toY){
         Client.getInstance().sendMove(fromX,fromY,toX,toY);
-        lastMove[0]=fromX;
-        lastMove[1]=fromY;
-        lastMove[2]=toX;
-        lastMove[3]=toY;
     }
 
     public GUIBoard(int players, int playerIndex){
         super();
-        lastMove=new int[4];
         this.playerIndex = playerIndex;
         setPrefSize(260,340);
         for(int x=0; x<=16; x++)
