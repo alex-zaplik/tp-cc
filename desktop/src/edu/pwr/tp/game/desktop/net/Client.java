@@ -71,6 +71,7 @@ public class Client {
 						final String input = getIn().readLine();
 
 						if (input != null)
+							System.out.println(input);
 							Platform.runLater(new Runnable() {
 								@Override
 								public void run() {
@@ -80,8 +81,10 @@ public class Client {
 					}
 				} catch (IOException e) {
 					System.err.println("Server closed");
-					Client.getInstance().disconnect();
-					// TODO: Change view to loginView
+					Platform.runLater(() -> {
+						Client.getInstance().disconnect();
+						DesktopLauncher.changeRoot(null, DesktopLauncher.loginView);
+					});
 					return;
 				}
 			}

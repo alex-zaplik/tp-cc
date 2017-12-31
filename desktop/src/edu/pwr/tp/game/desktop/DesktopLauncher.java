@@ -12,13 +12,21 @@ public class DesktopLauncher extends Application {
 	public static MainView mainView;
 	public static HelpView helpView;
 	public static LoginView loginView;
-	public static PartyListView partyListView;
+	// public static PartyListView partyListView;
 	public static PartyView partyView;
 
+	private static Stage lastStage = null;
+
 	public static void changeRoot(Stage stage, Pane root) {
-		stage.hide();
-		stage.getScene().setRoot(root);
-		stage.show();
+		if (stage != null)
+			lastStage = stage;
+
+		if (lastStage == null)
+			return;
+
+		lastStage.hide();
+		lastStage.getScene().setRoot(root);
+		lastStage.show();
 	}
 
 	@Override
@@ -26,7 +34,7 @@ public class DesktopLauncher extends Application {
 		mainView = new MainView(primaryStage);
 		helpView = new HelpView(primaryStage);
 		loginView = new LoginView(primaryStage);
-		partyListView = new PartyListView(primaryStage);
+		// partyListView = new PartyListView(primaryStage);
 		partyView = new PartyView(primaryStage);
 
 		primaryStage.setTitle("mojeChineseCheckers");

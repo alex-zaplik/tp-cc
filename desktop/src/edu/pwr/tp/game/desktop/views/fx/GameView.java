@@ -6,6 +6,7 @@ import edu.pwr.tp.game.desktop.views.IView;
 import edu.pwr.tp.game.desktop.views.fx.game_view_elements.GUIBoard;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -45,6 +46,10 @@ public class GameView extends GridPane implements IView {
 
         add(board,0,0);
 
+        Button skip = new Button("Skip move");
+        skip.setOnAction(event -> Client.getInstance().skipMove());
+        add(skip, 1, 0);
+
         Client.getInstance().sendDone(true);
     }
 
@@ -57,12 +62,20 @@ public class GameView extends GridPane implements IView {
         alert.showAndWait();
     }
 
+    private void displayYourMoveMessage() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Your move");
+        alert.setHeaderText("Your move");
+        alert.setContentText("Make a move or skip");
+
+        alert.showAndWait();
+    }
+
     @Override
     public void handleInput(String msg) {
-        System.out.println("GameView: " + msg);
-
         Map<String, Object> response = Client.getInstance().parser.parse(msg);
         if (response.containsKey("s_move")) {
+            displayYourMoveMessage();
             // TODO: Handle jumps and skips
 
             if (board != null) {

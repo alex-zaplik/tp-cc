@@ -62,10 +62,11 @@ public class LoginView extends FXView {
 				if (Client.getInstance().initConnection(this, tAddress.getText(), port)) {
 					Client.getInstance().startListening();
 
-					DesktopLauncher.partyListView.resolvePending(pendingMsg);
-					Client.getInstance().changeView(DesktopLauncher.partyListView);
+					PartyListView partyListView = new PartyListView(stage);
+					partyListView.resolvePending(pendingMsg);
+					Client.getInstance().changeView(partyListView);
 
-					DesktopLauncher.changeRoot(stage, DesktopLauncher.partyListView);
+					DesktopLauncher.changeRoot(stage, partyListView);
 
 					return;
 				}
