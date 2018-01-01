@@ -76,16 +76,17 @@ public class GameView extends GridPane implements IView {
         Map<String, Object> response = Client.getInstance().parser.parse(msg);
         if (response.containsKey("s_move")) {
             displayYourMoveMessage();
-            // TODO: Handle jumps and skips
 
             if (board != null) {
-                board.startPlayerTurn();
+                if(board.getLastPawnMovedByMe()==null) board.startPlayerTurn();
+                else board.getLastPawnMovedByMe().enableMove();
             } else {
                 isMoving = true;
             }
         } else if (response.containsKey("b_valid")) {
                 board.getLastPawnMovedByMe().confirmMove((boolean) response.get("b_valid"));
                 if((boolean) response.get("b_valid")) board.startEnemyTurn();
+                if(!((boolean) response.get("b_jump"))) board.setLastPawnMovedByMe(null);
         } else if (response.containsKey("i_action")) {
             board.movePawn((int) response.get("i_fx"), (int) response.get("i_fy"), (int) response.get("i_tx"), (int) response.get("i_ty"));
         } else if (response.containsKey("s_disc")) {
