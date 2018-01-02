@@ -47,7 +47,10 @@ public class GameView extends GridPane implements IView {
         add(board,0,0);
 
         Button skip = new Button("Skip move");
-        skip.setOnAction(event -> Client.getInstance().skipMove());
+        skip.setOnAction(event -> {
+            Client.getInstance().skipMove();
+            board.setLastPawnMovedByMe(null);
+        });
         add(skip, 1, 0);
 
         Client.getInstance().sendDone(true);
@@ -85,8 +88,11 @@ public class GameView extends GridPane implements IView {
             }
         } else if (response.containsKey("b_valid")) {
                 board.getLastPawnMovedByMe().confirmMove((boolean) response.get("b_valid"));
-                if((boolean) response.get("b_valid")) board.startEnemyTurn();
-                if(!((boolean) response.get("b_jump"))) board.setLastPawnMovedByMe(null);
+                if((boolean) response.get("b_valid")){
+                    board.startEnemyTurn();
+                    if(!((boolean) response.get("b_jump"))) board.setLastPawnMovedByMe(null);
+                }
+                else board.setLastPawnMovedByMe(null);
         } else if (response.containsKey("i_action")) {
             board.movePawn((int) response.get("i_fx"), (int) response.get("i_fy"), (int) response.get("i_tx"), (int) response.get("i_ty"));
         } else if (response.containsKey("s_disc")) {
