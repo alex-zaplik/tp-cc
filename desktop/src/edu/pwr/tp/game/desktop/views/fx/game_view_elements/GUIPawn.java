@@ -45,6 +45,7 @@ public class GUIPawn extends Circle {
                     if (field.getX() == getX() && field.getY() == getY()) {
                         setCenterX(field.getCenterX());
                         setCenterY(field.getCenterY());
+                        board.setLastPawnMovedByMe(null);
                         displayInvalidMove();
                         break;
                     }
